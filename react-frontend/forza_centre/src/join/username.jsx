@@ -9,7 +9,11 @@ export default function Username() {
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [players, setPlayers] = useState([]);
     const [started, setStarted] = useState(false);
-    const [rounds, setRounds] = useState([]);
+    const [price, setPrice] = useState("");
+    const [class_, setClass] = useState("");
+    const [race, setRace] = useState("");
+    const [not_upgradeable, setNotUpgradeable] = useState("");
+    const [cartype, setCarType] = useState("");
     class Round {
         selectedprice = null;
         selectedclass = null;
@@ -39,10 +43,14 @@ export default function Username() {
             });
 
             socket.on('started', (data) => {
-                console.log(data);
                 setStarted(data.state);
-                let round = new Round(data.options.selectedprice, data.options.selectedclass, data.options.selectedrace, data.options.selectednot_upgradeable, data.options.selectedcartype);
-                setRounds(round);
+                let options = data.options;
+                let round = new Round(options.selectedprice, options.selectedclass, options.selectedrace, options.selectednot_upgradeable, options.selectedcartype)
+                setPrice(round.selectedprice);
+                setClass(round.selectedclass);
+                setRace(round.selectedrace);
+                setNotUpgradeable(round.selectednot_upgradeable);
+                setCarType(round.selectedcartype);
             })
         }
 
@@ -85,7 +93,11 @@ export default function Username() {
             {players[0] === username ? <button onClick={ start }>Start</button> : null}
             <p>{players}</p>
             <p>Started: { '' + started }</p>
-            <p>Round: {rounds}</p>
+            <p>Price: {price}</p>
+            <p>Class: {class_}</p>
+            <p>Race: {race}</p>
+            <p>Not Upgradeable: {not_upgradeable}</p>
+            <p>Car Type: {cartype}</p>
         </>
     );
 }
