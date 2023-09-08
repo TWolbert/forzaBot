@@ -5,7 +5,7 @@ module.exports = {
 		.setName('join')
 		.setDescription('Used to join an active game'),
 	async execute(interaction) {
-        fetch('http://localhost:3000/joingame', {
+        fetch('http://localhost:25605/joingame', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

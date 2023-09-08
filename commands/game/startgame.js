@@ -10,7 +10,7 @@ module.exports = {
             value: "Loading...",
         }).setColor('#c355f2').setImage('https://cdn.discordapp.com/attachments/1149384071563186258/1149703278020542464/botIcon.png');
         interaction.reply({embeds: [embed]}).then(() => {
-            fetch('http://localhost:3000/creategame', {
+            fetch('http://localhost:25605/creategame', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -5,7 +5,7 @@ module.exports = {
 		.setName('cleargame')
 		.setDescription('Used to clear all games from the database'),
 	async execute(interaction) {
-        fetch('http://localhost:3000/cleargame', {
+        fetch('http://localhost:25605/cleargame', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
