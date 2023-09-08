@@ -228,7 +228,7 @@ app.post('/joingame', (req, res) => {
         return;
     }
     res.json({
-        link: `http://localhost:5173/join/${username}`
+        link: `http://nbg02.sq3.nl:25605/join/${username}`
     })
 })
 
