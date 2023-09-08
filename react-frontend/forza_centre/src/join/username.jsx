@@ -9,6 +9,22 @@ export default function Username() {
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [players, setPlayers] = useState([]);
     const [started, setStarted] = useState(false);
+    const [rounds, setRounds] = useState([]);
+    class Round {
+        selectedprice = null;
+        selectedclass = null;
+        selectedrace = null;
+        selectednot_upgradeable = null;
+        selectedcartype = null;
+    
+        constructor(selectedprice, selectedclass, selectedrace, selectednot_upgradeable, selectedcartype) {
+            this.selectedprice = selectedprice;
+            this.selectedclass = selectedclass;
+            this.selectedrace = selectedrace;
+            this.selectednot_upgradeable = selectednot_upgradeable;
+            this.selectedcartype = selectedcartype;
+        }
+    }
 
     useEffect(() => {
         function onConnect() {
@@ -25,6 +41,8 @@ export default function Username() {
             socket.on('started', (data) => {
                 console.log(data);
                 setStarted(data.state);
+                let round = new Round(data.options.selectedprice, data.options.selectedclass, data.options.selectedrace, data.options.selectednot_upgradeable, data.options.selectedcartype);
+                setRounds(round);
             })
         }
 
@@ -67,6 +85,7 @@ export default function Username() {
             {players[0] === username ? <button onClick={ start }>Start</button> : null}
             <p>{players}</p>
             <p>Started: { '' + started }</p>
+            <p>Round: {rounds}</p>
         </>
     );
 }
