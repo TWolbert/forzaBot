@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const path = require('path');
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // Replace with your actual frontend URL
+    origin: "http://nbg02.sq3.nl:25605", // Replace with your actual frontend URL
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type"],
   },
