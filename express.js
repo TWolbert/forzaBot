@@ -7,6 +7,7 @@ let forzaCentre = "forza_centre";
 const { Server } = require("socket.io");
 const http = require('http');
 const server = http.createServer(app);
+const path = require('path');
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173", // Replace with your actual frontend URL
@@ -16,6 +17,8 @@ const io = new Server(server, {
 });
 const cors = require('cors');
 const port = process.env.PORT || 3000;
+// Serve static files from the 'dist' folder
+app.use(express.static(path.join(__dirname, 'react-frontend/forza_centre/dist')));
 class Round {
     priceoptions = ["50k", "100k", "150k", "200k", "250k", "500k"];
     selectedprice = null;
@@ -155,7 +158,6 @@ const con = mysql.createPool({
 
     
 
-app.get('/', (req, res) => res.send('Hello, world!'));
 
 app.get('/showDBs', (req, res) => {
     con.getConnection(function(err) {
@@ -230,6 +232,14 @@ app.post('/joingame', (req, res) => {
     })
 })
 
+// Define a catch-all route to serve your React app
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'react-frontend/forza_centre/dist'));
+  });
 
+app.get('/join/:username', (req, res) => {
+    // serve reat page
+    res.sendFile(path.join(__dirname, 'react-frontend/forza_centre/dist/index.html'));
+})
 
 server.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

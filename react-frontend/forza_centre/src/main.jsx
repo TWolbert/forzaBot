@@ -7,6 +7,10 @@ import Username from './join/username'
 
 const router = createBrowserRouter([
   {
+    path: '/',
+    element: <Root />,
+  },
+  {
     path: '/join',
     element: <Root />,
     children: [
