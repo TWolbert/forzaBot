@@ -39,15 +39,18 @@ module.exports = {
                     }).then(response => response.json()).then(data => {
                         // If data.gameStarted is true, then the game has started
                         if (data.gameStarted) {
-                            console.table(data);
-                            let price = data.result.price;
-                            let class_ = data.result.class;
-                            let race = data.result.race;
-                            let not_upgradeable = data.result.not_upgradeable;
+                            console.table(data.result);
+                            let res = data.result;
+                            let price = res.price;
+                            let class_ = res.class;
+                            let race = res.race;
+                            let not_upgradeable = res.not_upgradeable;
+                            let type = res.type;
                             let gameDetails = `Price: ${price}\n
                             Class: ${class_}\n
                             Race: ${race}\n
-                            Not Upgradeable: ${not_upgradeable}\n`
+                            Not Upgradeable: ${not_upgradeable}\n
+                            Type: ${type}\n`
                             clearInterval(this);
                             // update reply to contain game details
                             embed = new EmbedBuilder().addFields({
