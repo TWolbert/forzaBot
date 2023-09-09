@@ -14,6 +14,7 @@ module.exports = {
         }).then(response => response.json()).then(data => {
             console.table(data.result);
             let car = data.result[0];
+            if (!car) return interaction.reply("Car not found")
             let embed = new EmbedBuilder()
                 .setTitle(car.name)
                 .setDescription("CR" + car.price)
