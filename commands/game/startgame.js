@@ -46,10 +46,7 @@ module.exports = {
                             let not_upgradeable = res.not_upgradeable;
                             let type = res.cartype;
                             let playersString = "";
-                            for (let i = 0; i < res.players.length; i++) {
-                                playersString += `${res.players[i]}, `
-                            }
-                            playersString = playersString.substring(0, playersString.length - 2);
+                            playersString = res.players.replace("[", "").replace("]", "").replace(/'/g, "").replace(/,/g, ", ");
                             let gameDetails = `Price: ${price}
                             Class: ${class_}
                             Race: ${race}
