@@ -15,11 +15,14 @@ module.exports = {
             console.table(data.result);
             let car = data.result[0];
             if (!car) return interaction.reply("Car not found")
+
+            let carString = `**${car.name}**\n`
+            carString += `**Price:** CR${car.price}\n`
+            carString += `**Class:** ${car.class}${car.classnumber}\n`
+            carString += `**Wikia link:** ${car.wikialink}\n`
             let embed = new EmbedBuilder()
-                .addField("Class", car.class + car.classnumber)
-                .addField("Wikia", car.wikialink)   
                 .setTitle(car.name)
-                .setDescription("CR" + car.price)
+                .setDescription(carString)
             interaction.reply({ embeds: [embed] })
         })
 	},
