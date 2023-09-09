@@ -321,25 +321,17 @@ app.get('/getcar/:carname', (req, res) => {
     con.getConnection(function(err) {
         let query = `SELECT * FROM ${forzaCars} WHERE name = ?`;
         // Run the query
-        con.query(query, values, function (err, result, fields) {
-            if (err) throw err;
-            console.table(result);
-            let link = result[0].wikialink;
-            console.log(link);
-            let html = fetch(link).then(res => res.text());
-            // get src of img tag with class pi-image-thumbnail
-            // split into lines
-            // find line with pi-image-thumbnail
-            // split into words
-            // find word with src
-            // split into characters
-            // remove first 5 and last 1
-            // join back together
-            let img = html.split('\n').find(line => line.includes('pi-image-thumbnail')).split(' ').find(word => word.includes('src')).split('').slice(5, -1).join('');
-            console.log(img);
-            res.json({
-                result: result,
-                imagelink: img
+        con.query(query, carname, function (err, result, fields) {
+            // Get the wikia link from result
+            let wikialink = result[0].wikialink;
+            // download page at wikialink
+            const fetch = require('node-fetch');
+            fetch(wikialink).then(response => response.text()).then(data => {
+                let imagelink = data.split('<meta property="og:image" content="')[1].split('"')[0];
+                res.json({
+                    result: result,
+                    imagelink: imagelink
+                })
             })
         });
     })
