@@ -326,6 +326,7 @@ app.get('/getcar/:carname', (req, res) => {
             if (err) throw err;
             // Download webpage from result[0].wikialink
             // Parse html
+            console.log(result[0].wikialink)
             let link = result[0].wikialink;
             let html = await fetch(link).then(res => res.text());
             let dom = new JSDOM(html);
