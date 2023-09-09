@@ -19,6 +19,7 @@ const io = new Server(server, {
 });
 const cors = require('cors');
 const port = process.env.PORT || 3000;
+const fetch = require('node-fetch');
 // Serve static files from the 'dist' folder
 app.use(express.static(path.join(__dirname, 'react-frontend/forza_centre/dist')));
 class Round {
@@ -324,8 +325,9 @@ app.get('/getcar/:carname', (req, res) => {
         con.query(query, carname, function (err, result, fields) {
             // Get the wikia link from result
             let wikialink = result[0].wikialink;
+            console.table(result);
             // download page at wikialink
-            const fetch = require('node-fetch');
+
             fetch(wikialink).then(response => response.text()).then(data => {
                 let imagelink = data.split('<meta property="og:image" content="')[1].split('"')[0];
                 res.json({
