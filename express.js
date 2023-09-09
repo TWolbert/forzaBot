@@ -5,6 +5,7 @@ dotenv.config();
 const mysql = require('mysql');
 let forzaCentre = "forza_centre";
 let finGames = "fin_games";
+let forzaCars = "forza_cars";
 const { Server } = require("socket.io");
 const http = require('http');
 const server = http.createServer(app);
@@ -315,6 +316,21 @@ app.post('/joingame', (req, res) => {
         link: `http://nbg02.sq3.nl:25605/join/${username}`
     })
 })
+app.get('/getcar/:carname', (req, res) => {
+    let carname = req.params.carname;
+
+    con.getConnection(function(err) {
+        let query = `SELECT * FROM ${forzaCars} WHERE name = ?`;
+        let values = [carname];
+        // Run the query
+        con.query(query, values, function (err, result, fields) {
+            if (err) throw err;
+            res.json({
+                result: result
+            })
+        });
+    })
+});
 
 // Define a catch-all route to serve your React app
 app.get('*', (req, res) => {
