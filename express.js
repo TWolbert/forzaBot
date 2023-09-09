@@ -156,11 +156,7 @@ io.on('connection', (socket) => {
     socket.on('stop', () => {
         // Emit to all clients that the game has stopped
         // Update database
-        io.to('forzaCentre').emit('stopped', {
-            state: false,
-        });
-        gameActive = false;
-        // move game to finGames table
+        console.log('game stopped');
         con.getConnection(function(err) {
             let query = `CREATE TABLE IF NOT EXISTS ${finGames} LIKE ${forzaCentre}`;
             // Run the query
@@ -178,6 +174,12 @@ io.on('connection', (socket) => {
                 });
             });
         });
+        io.to('forzaCentre').emit('stopped', {
+            state: false,
+        });
+        gameActive = false;
+        // move game to finGames table
+        
     })
   });
 
