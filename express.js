@@ -324,15 +324,19 @@ app.get('/getcar/:carname', (req, res) => {
         // Run the query
         con.query(query, values, async function (err, result, fields) {
             if (err) throw err;
-            // Download webpage from result[0].wikialink
-            // Parse html
-            console.log(result[0].wikialink)
+            console.log('hit')
             let link = result[0].wikialink;
             let html = await fetch(link).then(res => res.text());
-            let dom = new JSDOM(html);
-            let document = dom.window.document;
             // get src of img tag with class pi-image-thumbnail
-            let img = document.querySelector('.pi-image-thumbnail').src;
+            // split into lines
+            // find line with pi-image-thumbnail
+            // split into words
+            // find word with src
+            // split into characters
+            // remove first 5 and last 1
+            // join back together
+            let img = html.split('\n').find(line => line.includes('pi-image-thumbnail')).split(' ').find(word => word.includes('src')).split('').slice(5, -1).join('');
+            console.log(img);
             res.json({
                 result: result,
                 imagelink: img
