@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, createComponentBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,7 +13,14 @@ module.exports = {
             }
         }).then(response => response.json()).then(data => {
             console.table(data.result);
-            interaction.reply("Here's your car! " + data, ephemeral = true)
+            let car = data.result[0];
+            let embed = EmbedBuilder()
+                .setTitle(car.name)
+                .setDescription("CR" + car.price)
+                .setThumbnail(car.image)
+                .addField("Class", car.class + car.classnumber)
+                .addField("Wikia", car.wikialink)   
+            interaction.reply({ embeds: [embed] })
         })
 	},
 };
