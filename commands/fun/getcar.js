@@ -17,7 +17,6 @@ module.exports = {
             let embed = EmbedBuilder()
                 .setTitle(car.name)
                 .setDescription("CR" + car.price)
-                .setThumbnail(car.image)
                 .addField("Class", car.class + car.classnumber)
                 .addField("Wikia", car.wikialink)   
             interaction.reply({ embeds: [embed] })
