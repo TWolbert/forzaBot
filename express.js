@@ -262,6 +262,28 @@ app.post('/joingame', (req, res) => {
         })
         return;
     }
+    con.getConnection(function(err) {
+        let query = `SELECT * FROM ${forzaCentre}`;
+        // Run the query
+        con.query(query, function (err, result, fields) {
+            if (err) throw err;
+            let players = JSON.parse(result[0].players);
+            // Check if the player is already in the game
+            if (players.includes(username)) {
+                res.json({
+                    error: "You are already in the game"
+                })
+                return;
+            }
+                // Check if game hasn't started
+            if (result[0].gameStarted) {
+                res.json({
+                    error: "The game has already started"
+                });
+                return;
+            }
+        })
+    })
     res.json({
         link: `http://nbg02.sq3.nl:25605/join/${username}`
     })
