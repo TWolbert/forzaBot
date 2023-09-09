@@ -40,12 +40,12 @@ module.exports = {
                         // If data.gameStarted is true, then the game has started
                         if (data.gameStarted) {
                             console.table(data.result);
-                            let res = data.result;
+                            let res = JSON.parse(data.result);
                             let price = res.price;
                             let class_ = res.class;
                             let race = res.race;
                             let not_upgradeable = res.not_upgradeable;
-                            let type = res.type;
+                            let type = res.cartype;
                             let gameDetails = `Price: ${price}\n
                             Class: ${class_}\n
                             Race: ${race}\n
