@@ -19,7 +19,6 @@ const io = new Server(server, {
 });
 const cors = require('cors');
 const port = process.env.PORT || 3000;
-const fetch = require('node-fetch');
 // Serve static files from the 'dist' folder
 app.use(express.static(path.join(__dirname, 'react-frontend/forza_centre/dist')));
 class Round {
