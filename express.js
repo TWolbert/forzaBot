@@ -318,13 +318,14 @@ app.post('/joingame', (req, res) => {
 })
 app.get('/getcar/:carname', (req, res) => {
     let carname = req.params.carname;
-    console.log('hit')
     con.getConnection(function(err) {
         let query = `SELECT * FROM ${forzaCars} WHERE name = ?`;
         // Run the query
         con.query(query, values, function (err, result, fields) {
             if (err) throw err;
+            console.table(result);
             let link = result[0].wikialink;
+            console.log(link);
             let html = fetch(link).then(res => res.text());
             // get src of img tag with class pi-image-thumbnail
             // split into lines
