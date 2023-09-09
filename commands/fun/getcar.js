@@ -16,10 +16,10 @@ module.exports = {
             let car = data.result[0];
             if (!car) return interaction.reply("Car not found")
             let embed = new EmbedBuilder()
-                .setTitle(car.name)
-                .setDescription("CR" + car.price)
                 .addField("Class", car.class + car.classnumber)
                 .addField("Wikia", car.wikialink)   
+                .setTitle(car.name)
+                .setDescription("CR" + car.price)
             interaction.reply({ embeds: [embed] })
         })
 	},
