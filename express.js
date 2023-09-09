@@ -267,6 +267,7 @@ app.post('/joingame', (req, res) => {
         // Run the query
         con.query(query, function (err, result, fields) {
             if (err) throw err;
+            console.log(result);
             let players = JSON.parse(result[0].players);
             // Check if the player is already in the game
             if (players.includes(username)) {
