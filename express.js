@@ -147,7 +147,7 @@ io.on('connection', (socket) => {
         });
         // Set game to started in database and insert game values
         con.getConnection(function(err) {
-            let query = `UPDATE ${forzaCentre} SET gameStarted = 1, SET price = '${rounddetails.selectedprice}', SET class = '${rounddetails.selectedclass}', SET race = '${rounddetails.selectedrace}', SET not_upgradeable = '${rounddetails.selectednot_upgradeable}', SET cartype = '${rounddetails.selectedcartype}' WHERE gameStarted = 0 `;
+            let query = `UPDATE ${forzaCentre} SET gameStarted = 1, price = '${rounddetails.selectedprice}', class = '${rounddetails.selectedclass}', race = '${rounddetails.selectedrace}', not_upgradeable = '${rounddetails.selectednot_upgradeable}', cartype = '${rounddetails.selectedcartype}' WHERE gameStarted = 0;`;
             // Run the query
             con.query(query, function (err, result, fields) {
                 if (err) throw err;
