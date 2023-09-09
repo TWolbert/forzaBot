@@ -255,6 +255,28 @@ app.get('/cleargame', (req, res) => {
     })
 })
 
+app.get('/botgamestatus', (req, res) => {
+    // Send back if the game has started
+    con.getConnection(function(err) {
+        let query = `SELECT * FROM ${forzaCentre}`;
+        // Run the query
+        con.query(query, function (err, result, fields) {
+            if (err) throw err;
+            console.log(result);
+            if (result.length == 0) {
+                res.json({
+                    gameStarted: false
+                })
+                return;
+            }
+            res.json({
+                gameStarted: result[0].gameStarted,
+                result: result
+            })
+        });
+    })
+})
+
 app.post('/joingame', (req, res) => {
     let username = req.body.username;
     console.log(username + ' joined the game');

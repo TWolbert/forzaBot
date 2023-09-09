@@ -30,6 +30,39 @@ module.exports = {
                     iconURL: "https://cdn.discordapp.com/attachments/1149384071563186258/1149703278020542464/botIcon.png"
                 });
                 interaction.editReply({embeds: [embed]})
+
+                setInterval(() => {
+                    fetch('http://localhost:25605/botgamestatus', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(response => response.json()).then(data => {
+                        // If data.gameStarted is true, then the game has started
+                        if (data.gameStarted) {
+                            let price = data.result.price;
+                            let class_ = data.result.class;
+                            let race = data.result.race;
+                            let not_upgradeable = data.result.not_upgradeable;
+                            let gameDetails = `Price: ${price}\n
+                            Class: ${class_}\n
+                            Race: ${race}\n
+                            Not Upgradeable: ${not_upgradeable}\n`
+                            clearInterval(this);
+                            // update reply to contain game details
+                            embed = new EmbedBuilder().addFields({
+                                name: "Game Started!",
+                                value: `This game has started, the details are \n${gameDetails}`
+                            }).setColor('#c355f2')
+                            .setImage('https://cdn.discordapp.com/attachments/1149384071563186258/1149703278020542464/botIcon.png')
+                            .setFooter({
+                                text: "Bot created by @teunw",
+                                iconURL: "https://cdn.discordapp.com/attachments/1149384071563186258/1149703278020542464/botIcon.png"
+                            });
+                            interaction.editReply({embeds: [embed]})
+                        }
+                    })
+                }, 1000);
             })
         })
 		// fetch /creategame with the user's username as post
