@@ -140,13 +140,16 @@ io.on('connection', (socket) => {
     socket.on('start', () => {
         // Emit to all clients that the game has started
         // Update database
+        let rounddetails = new Round();
         io.to('forzaCentre').emit('started', {
             state: true,
-            options: new Round()
+            options: rounddetails
         });
-        // Set game to started in database
+        // Set game to started in database and insert game values
         con.getConnection(function(err) {
-            let query = `UPDATE ${forzaCentre} SET gameStarted = 1 WHERE gameStarted = 0`;
+            let query = `UPDATE ${forzaCentre} SET gameStarted = 1, SET price = ${rounddetails.selectedprice}, SET class = ${rounddetails.selectedclass},
+            SET race = ${rounddetails.selectedrace}, SET not_upgradeable = ${rounddetails.selectednot_upgradeable}, SET cartype = ${rounddetails.selectedcartype}
+             WHERE gameStarted = 0 `;
             // Run the query
             con.query(query, function (err, result, fields) {
                 if (err) throw err;
@@ -262,17 +265,19 @@ app.get('/botgamestatus', (req, res) => {
         // Run the query
         con.query(query, function (err, result, fields) {
             if (err) throw err;
-            console.log(result);
             if (result.length == 0) {
                 res.json({
                     gameStarted: false
                 })
                 return;
             }
-            res.json({
-                gameStarted: result[0].gameStarted,
-                result: result
-            })
+            else {
+                res.json({
+                    gameStarted: result[0].gameStarted,
+                    result: result
+                })
+            }
+
         });
     })
 })
@@ -291,7 +296,6 @@ app.post('/joingame', (req, res) => {
         // Run the query
         con.query(query, function (err, result, fields) {
             if (err) throw err;
-            console.log(result);
             let players = JSON.parse(result[0].players);
             // Check if the player is already in the game
             if (players.includes(username)) {
