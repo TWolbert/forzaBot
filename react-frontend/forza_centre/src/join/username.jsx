@@ -52,6 +52,10 @@ export default function Username() {
                 setNotUpgradeable(round.selectednot_upgradeable);
                 setCarType(round.selectedcartype);
             })
+
+            socket.on('stopped', (data) => {
+                setStarted(data.state);
+            });
         }
 
         function onDisconnect() {
@@ -83,6 +87,9 @@ export default function Username() {
     function start() {
         socket.emit('start', username);
     }
+    function stop() {
+        socket.emit('stop', username);
+    }
 
     return (
         <>
@@ -91,6 +98,7 @@ export default function Username() {
             <button onClick={ connect }>Join</button>
             <button onClick={ disconnect }>Leave</button>
             {players[0] === username ? <button onClick={ start }>Start</button> : null}
+            {players[0] === username ? <button onClick={ stop }>Stop</button> : null}
             <p>{players}</p>
             <p>Started: { '' + started }</p>
             <p>Price: {price}</p>

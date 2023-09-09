@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const mysql = require('mysql');
 let forzaCentre = "forza_centre";
+let finGames = "fin_games";
 const { Server } = require("socket.io");
 const http = require('http');
 const server = http.createServer(app);
@@ -143,7 +144,41 @@ io.on('connection', (socket) => {
             state: true,
             options: new Round()
         });
+        // Set game to started in database
+        con.getConnection(function(err) {
+            let query = `UPDATE ${forzaCentre} SET gameStarted = 1 WHERE gameStarted = 0`;
+            // Run the query
+            con.query(query, function (err, result, fields) {
+                if (err) throw err;
+            });
+        });
     });
+    socket.on('stop', () => {
+        // Emit to all clients that the game has stopped
+        // Update database
+        io.to('forzaCentre').emit('stopped', {
+            state: false,
+        });
+        gameActive = false;
+        // move game to finGames table
+        con.getConnection(function(err) {
+            let query = `CREATE TABLE IF NOT EXISTS ${finGames} LIKE ${forzaCentre}`;
+            // Run the query
+            con.query(query, function (err, result, fields) {
+                if (err) throw err;
+                let query = `INSERT INTO ${finGames} SELECT * FROM ${forzaCentre}`;
+                // Run the query
+                con.query(query, function (err, result, fields) {
+                    if (err) throw err;
+                    let query = `DELETE FROM ${forzaCentre}`;
+                    // Run the query
+                    con.query(query, function (err, result, fields) {
+                        if (err) throw err;
+                    });
+                });
+            });
+        });
+    })
   });
 
 const con = mysql.createPool({
