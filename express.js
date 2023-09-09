@@ -321,12 +321,20 @@ app.get('/getcar/:carname', (req, res) => {
 
     con.getConnection(function(err) {
         let query = `SELECT * FROM ${forzaCars} WHERE name = ?`;
-        let values = [carname];
         // Run the query
-        con.query(query, values, function (err, result, fields) {
+        con.query(query, values, async function (err, result, fields) {
             if (err) throw err;
+            // Download webpage from result[0].wikialink
+            // Parse html
+            let link = result[0].wikialink;
+            let html = await fetch(link).then(res => res.text());
+            let dom = new JSDOM(html);
+            let document = dom.window.document;
+            // get src of img tag with class pi-image-thumbnail
+            let img = document.querySelector('.pi-image-thumbnail').src;
             res.json({
-                result: result
+                result: result,
+                imagelink: img
             })
         });
     })

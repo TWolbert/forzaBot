@@ -23,6 +23,7 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle(car.name)
                 .setDescription(carString)
+                .setThumbnail(data.imagelink)
             interaction.reply({ embeds: [embed] })
         })
 	},
