@@ -40,7 +40,7 @@ module.exports = {
                         // If data.gameStarted is true, then the game has started
                         if (data.gameStarted) {
                             console.log(data.result);
-                            let res = JSON.parse(JSON.stringify(data.result));
+                            let res = data.result[0]
                             let price = res.price;
                             let class_ = res.class;
                             let race = res.race;
