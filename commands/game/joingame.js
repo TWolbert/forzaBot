@@ -22,7 +22,8 @@ module.exports = {
                 return;
             }
             console.table(data);
-            interaction.reply(`You can join using this link: ${data.link}`, ephemeral = true)
+            // Send dm to user with join link
+            interaction.user.send(`Hey ${interaction.user.username}! Click this link to join the game: ${data.link}`)
         })
 	},
 };
