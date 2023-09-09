@@ -97,8 +97,10 @@ export default function Username() {
             <p>State: { '' + isConnected }</p>
             <button onClick={ connect }>Join</button>
             <button onClick={ disconnect }>Leave</button>
-            {players[0] === username ? <button onClick={ start }>Start</button> : null}
-            {players[0] === username ? <button onClick={ stop }>Stop</button> : null}
+            {players[0] === username ? <> 
+                <button onClick={ start }>Start</button>
+                <button onClick={ stop }>Stop</button>
+            </> : null}
             <p>{players}</p>
             <p>Started: { '' + started }</p>
             <p>Price: {price}</p>
