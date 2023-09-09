@@ -18,7 +18,7 @@ module.exports = {
 
             let carString = `**${car.name}**\n`
             carString += `**Price:** CR${car.price}\n`
-            carString += `**Class:** ${car.class}${car.classnumber}\n`
+            carString += `**Class:** ${car.classletter}${car.classnumber}\n`
             carString += `**Wikia link:** ${car.wikialink}\n`
             let embed = new EmbedBuilder()
                 .setTitle(car.name)
