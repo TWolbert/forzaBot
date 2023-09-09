@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('getcar')
-		.setDescription('Get a Forza car'),
+		.setDescription('Get a Forza car').addStringOption(option => option.setName('car').setDescription('The car you want to get').setRequired(true)),
 	async execute(interaction) {
 		console.log(interaction)
 		// fetch /getcar/:carname
