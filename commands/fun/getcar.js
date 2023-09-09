@@ -14,7 +14,7 @@ module.exports = {
         }).then(response => response.json()).then(data => {
             console.table(data.result);
             let car = data.result[0];
-            let embed = EmbedBuilder()
+            let embed = new EmbedBuilder()
                 .setTitle(car.name)
                 .setDescription("CR" + car.price)
                 .addField("Class", car.class + car.classnumber)
