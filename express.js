@@ -317,94 +317,101 @@ app.post('/joingame', (req, res) => {
     })
 })
 app.get('/getcar/:carname', (req, res) => {
-    let userCarName = req.params.carname.trim();
-    con.getConnection(function (err) {
-        let query = `SELECT * FROM ${forzaCars}`;
-        con.query(query, function (err, result, fields) {
-            if (err) {
-                res.status(500).json({
-                    error: "Internal server error"
-                });
-                return;
-            }
-
-            if (result.length === 0) {
-                res.status(404).json({
-                    error: "Car database is empty"
-                });
-                return;
-            }
-
-            // Function to calculate Levenshtein distance
-            function getLevenshteinDistance(a, b) {
-                if (a.length === 0) return b.length;
-                if (b.length === 0) return a.length;
-
-                const matrix = Array.from(Array(a.length + 1), () =>
-                    Array(b.length + 1).fill(0)
-                );
-
-                for (let i = 0; i <= a.length; i++) {
-                    matrix[i][0] = i;
+    try {
+        let userCarName = req.params.carname.trim();
+        con.getConnection(function (err) {
+            let query = `SELECT * FROM ${forzaCars}`;
+            con.query(query, function (err, result, fields) {
+                if (err) {
+                    res.status(500).json({
+                        error: "Internal server error"
+                    });
+                    return;
                 }
-
-                for (let j = 0; j <= b.length; j++) {
-                    matrix[0][j] = j;
+    
+                if (result.length === 0) {
+                    res.status(404).json({
+                        error: "Car database is empty"
+                    });
+                    return;
                 }
-
-                for (let i = 1; i <= a.length; i++) {
-                    for (let j = 1; j <= b.length; j++) {
-                        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-                        matrix[i][j] = Math.min(
-                            matrix[i - 1][j] + 1, // Deletion
-                            matrix[i][j - 1] + 1, // Insertion
-                            matrix[i - 1][j - 1] + cost // Substitution
-                        );
+    
+                // Function to calculate Levenshtein distance
+                function getLevenshteinDistance(a, b) {
+                    if (a.length === 0) return b.length;
+                    if (b.length === 0) return a.length;
+    
+                    const matrix = Array.from(Array(a.length + 1), () =>
+                        Array(b.length + 1).fill(0)
+                    );
+    
+                    for (let i = 0; i <= a.length; i++) {
+                        matrix[i][0] = i;
                     }
+    
+                    for (let j = 0; j <= b.length; j++) {
+                        matrix[0][j] = j;
+                    }
+    
+                    for (let i = 1; i <= a.length; i++) {
+                        for (let j = 1; j <= b.length; j++) {
+                            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+                            matrix[i][j] = Math.min(
+                                matrix[i - 1][j] + 1, // Deletion
+                                matrix[i][j - 1] + 1, // Insertion
+                                matrix[i - 1][j - 1] + cost // Substitution
+                            );
+                        }
+                    }
+    
+                    return matrix[a.length][b.length];
                 }
-
-                return matrix[a.length][b.length];
-            }
-
-            let closestCar = null;
-            let closestDistance = Infinity;
-            // Run .contains() on each car name
-            for (const car of result) {
-                const carName = car.name.toLowerCase();
-                if (carName.includes(userCarName.toLowerCase())) {
-                    closestCar = car;
-                    break;
-                }
-            }
-            if (!closestCar) {
+    
+                let closestCar = null;
+                let closestDistance = Infinity;
+                // Run .contains() on each car name
                 for (const car of result) {
                     const carName = car.name.toLowerCase();
-                    const distance = getLevenshteinDistance(userCarName.toLowerCase(), carName);
-                    if (distance < closestDistance) {
+                    if (carName.includes(userCarName.toLowerCase())) {
                         closestCar = car;
-                        closestDistance = distance;
+                        break;
                     }
                 }
-            }
-            if (closestCar) {
-                let wikialink = closestCar.wikialink;
-                fetch(wikialink)
-                    .then(response => response.text())
-                    .then(data => {
-                        let imagelink = data.split('<meta property="og:image" content="')[1].split('"')[0];
-                        imagelink = imagelink.replace("/1200?cb", "/2000?cb");
-                        res.json({
-                            result: closestCar,
-                            imagelink: imagelink
+                if (!closestCar) {
+                    for (const car of result) {
+                        const carName = car.name.toLowerCase();
+                        const distance = getLevenshteinDistance(userCarName.toLowerCase(), carName);
+                        if (distance < closestDistance) {
+                            closestCar = car;
+                            closestDistance = distance;
+                        }
+                    }
+                }
+                if (closestCar) {
+                    let wikialink = closestCar.wikialink;
+                    fetch(wikialink)
+                        .then(response => response.text())
+                        .then(data => {
+                            let imagelink = data.split('<meta property="og:image" content="')[1].split('"')[0];
+                            imagelink = imagelink.replace("/1200?cb", "/2000?cb");
+                            res.json({
+                                result: closestCar,
+                                imagelink: imagelink
+                            });
                         });
+                } else {
+                    res.status(404).json({
+                        error: "Car not found"
                     });
-            } else {
-                res.status(404).json({
-                    error: "Car not found"
-                });
-            }
+                }
+            });
         });
-    });
+    }
+    catch {
+        res.status(500).json({
+            error: "Internal server error"
+        });
+    }
 });
 
 
