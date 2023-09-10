@@ -32,6 +32,7 @@ module.exports = {
                 .setDescription(carString)
                 .setImage(data.imagelink)
                 .setColor('#c355f2')
+                .setThumbnail("https://static.wikia.nocookie.net/forzamotorsport/images/4/4a/Site-favicon.ico/revision/latest?cb=20211017210455")
                 .setFooter({
                     text: "Bot created by @teunw",
                     iconURL: "https://cdn.discordapp.com/attachments/1149384071563186258/1149703278020542464/botIcon.png"
