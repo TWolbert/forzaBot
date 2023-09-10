@@ -5,7 +5,8 @@ module.exports = {
 		.setName('getcar')
 		.setDescription('Get a Forza car').addStringOption(option => option.setName('car').setDescription('The car you want to get').setRequired(true)),
 	async execute(interaction) {
-		// fetch /getcar/:carname
+        try {
+            		// fetch /getcar/:carname
         fetch('http://localhost:25605/getcar/' + interaction.options.getString('car'), {
             method: 'GET',
             headers: {
@@ -39,5 +40,9 @@ module.exports = {
                 });
             interaction.reply({ embeds: [embed] })
         })
+        }
+        catch  {
+            interaction.reply("An error occured")
+        }
 	},
 };
