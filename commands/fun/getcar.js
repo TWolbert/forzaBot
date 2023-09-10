@@ -12,8 +12,15 @@ module.exports = {
                 'Content-Type': 'application/json'
             }
         }).then(response => response.json()).then(data => {
+            if (data.error) {
+                interaction.reply(data.error, ephemeral = true)
+                setTimeout(() => {
+                    interaction.deleteReply();
+                }, 2000);
+                return;
+            }
             console.table(data.result);
-            let car = data.result[0];
+            let car = data.result;
             if (!car) return interaction.reply("Car not found")
 
             let carString = `**${car.name}**\n`
@@ -23,7 +30,12 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle(car.name)
                 .setDescription(carString)
-                .setThumbnail(data.imagelink)
+                .setImage(data.imagelink)
+                .setColor('#c355f2')
+                .setFooter({
+                    text: "Bot created by @teunw",
+                    iconURL: "https://cdn.discordapp.com/attachments/1149384071563186258/1149703278020542464/botIcon.png"
+                });
             interaction.reply({ embeds: [embed] })
         })
 	},
